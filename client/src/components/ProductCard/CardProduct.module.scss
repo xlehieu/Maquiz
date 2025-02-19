@@ -1,0 +1,16 @@
+.multiline-title {
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.price-quantity-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 1.6rem;
+    span:first-child {
+        color: #ee4d2d;
+        font-size: 2rem;
+    }
+}

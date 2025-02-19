@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs", // Đảm bảo "module" là "commonjs" để Node.js hiểu được các module
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "esModuleInterop": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "paths": {
+            "@types/*": ["src/app/@types/*"], // Alias cho thư mục @types
+            "@models/*": ["src/app/models/*"], // Alias cho thư mục models
+            "@controllers/*": ["src/app/controllers/*"], // Alias cho thư mục controllers
+            "@services/*": ["src/app/services/*"],
+            "@middlewares/*": ["src/app/middlewares/*"],
+            "~/*": ["*"]
+        },
+        "typeRoots": ["src/@types", "node_modules/@types"], // Thêm thư mục @types của bạn
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+}

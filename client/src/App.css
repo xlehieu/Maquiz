@@ -1,0 +1,54 @@
+@tailwind base;
+@layer base {
+    h3 {
+        @apply text-3xl;
+    }
+    h4 {
+        @apply text-2xl;
+    }
+    h5 {
+        @apply text-xl;
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+
+    @keyframes ping {
+        75%,
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+}
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+html *::-webkit-scrollbar {
+    width: 7px;
+}
+
+html *::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+.jodit_sticky > .jodit-toolbar__box {
+    position: unset;
+}
+:root {
+    --jd-color-border: #c1c1c1;
+    --jd-color-panel: #ffffff;
+    --jd-color-icon: #2b6bb5;
+}
+.ant-layout-sider {
+    max-width: 220px !important;
+    min-width: 220px !important;
+    width: 220px !important;
+}
