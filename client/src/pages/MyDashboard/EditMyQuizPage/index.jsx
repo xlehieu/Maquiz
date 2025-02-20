@@ -100,7 +100,6 @@ const EditGeneralInformationTab = () => {
         setQuizTopic(quizDetail?.topic);
         setQuizSchoolYear(quizDetail?.schoolYear);
     }, [quizDetail]);
-    console.log(quizEducationLevel);
     useEffect(() => {
         if (updateQuizGeneralMutation.isSuccess) {
             message.success('Cập nhật thông tin chung bài trắc nghiệm thành công');

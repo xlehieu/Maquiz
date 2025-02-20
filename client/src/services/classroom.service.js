@@ -17,7 +17,7 @@ export const createClassroom = async (data) => {
         return;
     } catch (err) {
         if (err.response) {
-            throw new Error(err.response.data);
+            throw new Error(err.response?.data?.message);
         }
     }
 };
@@ -28,7 +28,33 @@ export const getUserClassrooms = async () => {
         return;
     } catch (err) {
         if (err.response) {
-            throw new Error(err.response.data);
+            throw new Error(err?.response?.data?.message);
+        }
+    }
+};
+export const getClassroomDetail = async () => {
+    try {
+        const res = await axiosCredentials.get('/classroom/getClassroomDetail');
+        if (res.status === 200 && res.data) {
+            return res.data.data;
+        }
+    } catch (err) {
+        if (err.response) {
+            throw new Error(err?.response?.data?.message);
+        }
+    }
+};
+export const enrollInClassroom = async (data) => {
+    try {
+        const { classCode } = data;
+        if (!classCode?.trim()) throw 'Vui lòng nhập mã lớp';
+        const res = await axiosCredentials.patch('/classroom/enrollInClassroom', JSON.stringify({ classCode }));
+        if (res.status === 200 && res.data) {
+            return res.data.data;
+        }
+    } catch (err) {
+        if (err.response) {
+            throw new Error(err?.response?.data.message);
         }
     }
 };

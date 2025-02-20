@@ -23,17 +23,17 @@ const classroomSchema = new Schema<IClassroom>(
     },
     { timestamps: true },
 );
-classroomSchema.pre('validate', async function (next) {
-    let classCode = generateUniqueRandomString(6);
-    console.log(classCode);
-    let classCodeExists = await mongoose.models.classroom.exists({ classCode });
-    while (classCodeExists) {
-        classCode = generateUniqueRandomString(6);
-        classCodeExists = await mongoose.models.classroom.exists({ classCode });
-    }
-    this.thumb = imageClassThumbnailDefault[Math.floor(Math.random() * imageClassThumbnailDefault.length)];
-    this.classCode = classCode;
-    next();
-});
+// classroomSchema.pre('init', async function (next) {
+//     let classCode = generateUniqueRandomString(6);
+//     console.log(classCode);
+//     let classCodeExists = await mongoose.models.classroom.exists({ classCode });
+//     while (classCodeExists) {
+//         classCode = generateUniqueRandomString(6);
+//         classCodeExists = await mongoose.models.classroom.exists({ classCode });
+//     }
+//     this.thumb = imageClassThumbnailDefault[Math.floor(Math.random() * imageClassThumbnailDefault.length)];
+//     this.classCode = classCode;
+//     next();
+// });
 const ClassRoom = mongoose.model<IClassroom>('classroom', classroomSchema);
 export default ClassRoom;

@@ -5,5 +5,7 @@ const classroomRouter = Router();
 
 classroomRouter.post('/createClassroom', authUserMiddleware, ClassroomController.createClassroom);
 classroomRouter.get('/getUserClassrooms', authUserMiddleware, ClassroomController.getUserClassrooms);
+classroomRouter.get('/getClassroomDetail', authUserMiddleware, ClassroomController.getClassroomDetail);
+classroomRouter.patch('/enrollInClassroom', authUserMiddleware, ClassroomController.enrollInClassroom);
 
 export default classroomRouter;

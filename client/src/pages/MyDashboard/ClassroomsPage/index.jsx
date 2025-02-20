@@ -15,6 +15,7 @@ import { classroomImageFallback } from '~/constants';
 const CreateClassroomContext = createContext();
 const ModalContext = createContext();
 const ClassroomListContext = createContext();
+const EnrollInClassroomContext = createContext();
 const ModalProvider = ({ children }) => {
     const [isShowModal, setIsShowModal] = useState(false);
     const [titleModal, setTitleModal] = useState('');
@@ -57,6 +58,14 @@ const ClassroomListProvider = ({ children }) => {
         <ClassroomListContext.Provider value={{ classList: data, isLoadingQuery: isLoading }}>
             {children}
         </ClassroomListContext.Provider>
+    );
+};
+const EnrollInClassroomProvider = ({ children }) => {
+    const [classCode, setClassCode] = useState('');
+    return (
+        <EnrollInClassroomContext.Provider value={{ classCode, setClassCode }}>
+            {children}
+        </EnrollInClassroomContext.Provider>
     );
 };
 const ClassroomCard = ({ classroom, isMyClassroom = false }) => {
@@ -131,35 +140,67 @@ const ClassroomList = () => {
     );
 };
 //region JOIN CLASS ROOM
-const JoinClassroomContent = () => (
-    <div className="flex flex-col w-full">
-        {/* ta phải đặt class peer vào phần tử muốn lắng nghe,
+const EnrolledClassroomContent = () => {
+    const navigate = useNavigate();
+    const { setIsShowModal } = useContext(ModalContext);
+    const { classCode, setClassCode } = useContext(EnrollInClassroomContext);
+    const enrollInClassMutation = useMutationHooks((data) => ClassroomService.enrollInClassroom(data));
+    const handleClickEnroll = () => {
+        if (!classCode?.trim()) return message.error('Vui lòng nhập mã lớp học');
+        enrollInClassMutation.mutate({ classCode });
+    };
+    useEffect(() => {
+        if (enrollInClassMutation.isError) {
+            message.error(enrollInClassMutation?.error.message);
+        } else if (enrollInClassMutation.isSuccess) {
+            message.success('Tham gia lớp học thành công');
+            navigate(`${userDashboardRouter.classroom}/${classCode}`);
+        }
+    }, [enrollInClassMutation.isError, enrollInClassMutation.isSuccess]);
+    return (
+        <div className="flex flex-col w-full">
+            {/* ta phải đặt class peer vào phần tử muốn lắng nghe,
          và thêm peer-... vào phần tử muốn thay đổi
          ví dụ phải đặt peer vào input
          và đặt peer-placeholder-shown:top1/2 nghĩa là khi placeholder của input
         được hiển thị thì phần tử có peer-placeholder-shown sẽ được kích hoạt
             và peer chỉ ảnh hưởng đến phần tử anh em (sibling)
          */}
-        <div className="relative w-full">
-            <input
-                type="text"
-                id="classroomCode"
-                placeholder=" "
-                className="peer w-full border-2 border-gray-300 rounded-md px-4 pt-4 pb-2 text-base outline-none focus:border-primary transition-all"
-            />
-            <label
-                htmlFor="classroomCode"
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-base transition-all cursor-text peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-focus:text-primary bg-white px-1"
-            >
-                Mã lớp
-            </label>
+            <div className="relative w-full">
+                <input
+                    type="text"
+                    id="classroomCode"
+                    placeholder=" "
+                    value={classCode}
+                    onChange={(e) => setClassCode(e.target.value)}
+                    className="peer w-full border-2 border-gray-300 rounded-md px-4 pt-4 pb-2 text-base outline-none focus:border-primary transition-all"
+                />
+                <label
+                    htmlFor="classroomCode"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-base transition-all cursor-text peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-focus:text-primary bg-white px-1"
+                >
+                    Mã lớp
+                </label>
+            </div>
+            <div className="border-t flex justify-end pt-3 space-x-2">
+                <button onClick={() => setIsShowModal(false)} className="text-blue-500 px-2 py-1 font-semibold">
+                    Hủy
+                </button>
+                <button
+                    // disabled={!classCode?.trim()}
+                    onClick={handleClickEnroll}
+                    className={`${!classCode?.trim() ? 'text-gray-400' : 'text-blue-500'} font-semibold px-2 py-1 `}
+                >
+                    {enrollInClassMutation.isPending ? <LoadingOutlined /> : 'Tham gia'}
+                </button>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 //region CREATE CLASS ROOM
 const CreateClassroomContent = () => {
     const navigate = useNavigate();
-    const { isShowModal, setIsShowModal } = useContext(ModalContext);
+    const { setIsShowModal } = useContext(ModalContext);
     const { classroomName, setClassroomName, subjectName, setSubjectName } = useContext(CreateClassroomContext);
     const createClassroomMutation = useMutationHooks((data) => ClassroomService.createClassroom(data));
     const handleClickCreateClassroomModal = () => {
@@ -233,11 +274,10 @@ const CreateClassroomContent = () => {
         </div>
     );
 };
-
 const modalContents = [
     {
         title: 'Tham gia lớp học',
-        content: <JoinClassroomContent />,
+        content: <EnrolledClassroomContent />,
         textHandleButton: 'Tham gia',
     },
     {
@@ -317,7 +357,9 @@ const ClassroomsPage = () => (
     <ModalProvider>
         <CreateClassroomProvider>
             <ClassroomListProvider>
-                <ClassroomsPageMain />
+                <EnrollInClassroomProvider>
+                    <ClassroomsPageMain />
+                </EnrollInClassroomProvider>
             </ClassroomListProvider>
         </CreateClassroomProvider>
     </ModalProvider>

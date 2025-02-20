@@ -16,3 +16,19 @@ export const getUserClassrooms = async (req: Request, res: Response): Promise<an
         return res.status(500).json(err);
     }
 };
+export const getClassroomDetail = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const response = await ClassroomService.getClassroomDetail(req);
+        return res.status(200).json(response);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+};
+export const enrollInClassroom = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const response = await ClassroomService.enrollInClassroom(req);
+        return res.status(200).json(response);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+};
