@@ -69,51 +69,57 @@ const EnrollInClassroomProvider = ({ children }) => {
     );
 };
 const ClassroomCard = ({ classroom, isMyClassroom = false }) => {
-    const { name, thumb, teacher, classCode } = classroom;
     return (
-        <Link
-            to={`${userDashboardRouter.classroom}/${classCode}`}
-            className="w-full bg-white transition-all block duration-300 border-2 border-gray-200 rounded-lg overflow-hidden pb-3 hover:drop-shadow-lg relative h-56"
-        >
-            {thumb ? (
-                <LazyImage alt={name ?? 'classroom image'} src={thumb} className="w-full h-20 opacity-60" />
+        <div className="w-full bg-white transition-all block duration-300 border-2 border-gray-200 rounded-lg overflow-hidden pb-3 hover:drop-shadow-lg relative h-56">
+            {classroom?.thumb ? (
+                <LazyImage
+                    alt={classroom?.name ?? 'classroom image'}
+                    src={classroom?.thumb}
+                    className="w-full h-20 opacity-60"
+                />
             ) : (
                 <LazyImage
-                    alt={name ?? 'classroom image'}
+                    alt={classroom?.name ?? 'classroom image'}
                     src={classroomImageFallback}
                     className="w-full h-20 opacity-60"
                 />
             )}
             <div className="relative h-12">
-                {teacher?.avatar && (
+                {classroom?.teacher?.avatar && (
                     <LazyImage
-                        alt={teacher?.name ?? 'teacher image'}
-                        src={teacher?.avatar}
+                        alt={classroom?.teacher?.name ?? 'teacher image'}
+                        src={classroom?.teacher?.avatar}
                         className="w-12 h-full rounded-full overflow-hidden absolute z-0 -top-1/2 right-3"
                     />
                 )}
-                {name && <div className="z-10 text-2xl text-gray-700 font-medium ml-3 line-clamp-1">{name}</div>}
+                {classroom?.name && (
+                    <Link
+                        to={`${userDashboardRouter.classroom}/${classroom?.classCode}`}
+                        className="z-10 text-2xl text-gray-700 font-normal ml-3 line-clamp-1 hover:underline"
+                    >
+                        {classroom?.name}
+                    </Link>
+                )}
             </div>
-            {isMyClassroom && teacher?.name && (
+            {!isMyClassroom && classroom?.teacher?.name && (
                 <div className="z-10 text-xl md:text-lg absolute bottom-2 text-black font-light ml-3 line-clamp-1">
-                    {teacher?.name}
+                    {classroom?.teacher?.name}
                 </div>
             )}
-        </Link>
+        </div>
     );
 };
 //region Class list component
 const ClassroomList = () => {
     const { classList } = useContext(ClassroomListContext);
-    console.log(classList);
     return (
         <>
             {classList?.myClassrooms?.length > 0 && (
                 <>
                     <div className="flex flex-col items-center justify-center w-full p-4">
-                        <h2 className="text-xl font-bold">Lớp học của tôi</h2>
+                        <h2 className="text-xl font-bold text-gray-600">Lớp học của tôi</h2>
                     </div>
-                    <div className="w-full grid space-x-2 grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
+                    <div className="w-full grid gap-3 grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
                         {classList?.myClassrooms?.map((classroom, index) => (
                             <div key={index}>
                                 <ClassroomCard isMyClassroom={true} classroom={classroom} />
@@ -125,12 +131,12 @@ const ClassroomList = () => {
             {classList?.enrolledClassrooms?.length > 0 && (
                 <>
                     <div className="flex flex-col items-center justify-center w-full p-4">
-                        <h2 className="text-xl font-bold">Lớp học của tôi</h2>
+                        <h2 className="text-xl font-bold text-gray-600">Lớp học đang tham gia</h2>
                     </div>
-                    <div className="w-full space-x-2 grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+                    <div className="w-full grid gap-3 grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
                         {classList?.enrolledClassrooms?.map((classroom, index) => (
                             <div key={index}>
-                                <ClassroomCard />
+                                <ClassroomCard classroom={classroom} />
                             </div>
                         ))}
                     </div>
@@ -310,7 +316,7 @@ const ClassroomsPageMain = () => {
             <div className="flex justify-between my-5">
                 <h4 className="font-medium text-gray-500">Lớp học</h4>
             </div>
-            <section className="w-full min-h-screen bg-white px-8 py-8 rounded-xl shadow-lg flex flex-col">
+            <section className="w-full min-h-screen bg-white px-8 rounded-xl shadow-lg flex flex-col">
                 <div className="w-full border-b flex justify-end">
                     <Tippy
                         interactive={true}

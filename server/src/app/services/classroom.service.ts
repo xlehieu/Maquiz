@@ -75,18 +75,24 @@ export const createClassroom = (req: Request) => {
 export const getClassroomDetail = (req: Request) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const { classCode } = req.body;
-            if (!classCode) {
+            const { classCode } = req.query;
+            if (typeof classCode === 'string' && !classCode?.trim()) {
                 return reject({ status: 400, message: 'Thiếu dữ liệu' });
             }
-            const classroomDetail = await ClassRoom.findOne({ classCode: classCode }).select(['-id']);
+            const classroomDetail = await ClassRoom.findOne({ classCode: classCode }).select('-_id');
             if (!classroomDetail) return reject({ status: 400, message: 'Không tìm thấy dữ liệu lớp học' });
             const students = await User.find({
                 _id: {
                     $in: classroomDetail?.students,
                 },
-            });
-            const data = Object.assign(classroomDetail, students);
+            }).select(['-_id', 'name', 'avatar']);
+            const teacher = await User.find({
+                _id: {
+                    $in: classroomDetail.teacher,
+                },
+            }).select(['-_id', 'name', 'avatar']);
+            console.log(students);
+            const data = Object.assign(classroomDetail, { students }, { teacher });
             return resolve({ message: 'Successfully fetched classroom', data: data });
         } catch (err) {
             return reject({ message: 'ERROR', error: err });

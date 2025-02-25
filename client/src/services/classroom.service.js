@@ -14,7 +14,7 @@ export const createClassroom = async (data) => {
             }),
         );
         if (response.data) return response.data?.data;
-        return;
+        return null;
     } catch (err) {
         if (err.response) {
             throw new Error(err.response?.data?.message);
@@ -25,19 +25,29 @@ export const getUserClassrooms = async () => {
     try {
         const response = await axiosCredentials.get('/classroom/getUserClassrooms');
         if (response.data) return response.data?.data;
-        return;
+        return null;
     } catch (err) {
         if (err.response) {
             throw new Error(err?.response?.data?.message);
         }
     }
 };
-export const getClassroomDetail = async () => {
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+export const getClassroomDetail = async (data) => {
     try {
-        const res = await axiosCredentials.get('/classroom/getClassroomDetail');
+        const { classCode } = data;
+        const params = new URLSearchParams();
+        Object.entries({ classCode }).forEach(([key, value]) => {
+            if (value !== undefined) {
+                params.append(key, String(value));
+            }
+        });
+        if (!classCode?.trim()) throw 'Lỗi';
+        const res = await axiosCredentials.get(`/classroom/getClassroomDetail?${params}`);
         if (res.status === 200 && res.data) {
             return res.data.data;
         }
+        return null;
     } catch (err) {
         if (err.response) {
             throw new Error(err?.response?.data?.message);
@@ -52,6 +62,7 @@ export const enrollInClassroom = async (data) => {
         if (res.status === 200 && res.data) {
             return res.data.data;
         }
+        return null;
     } catch (err) {
         if (err.response) {
             throw new Error(err?.response?.data.message);

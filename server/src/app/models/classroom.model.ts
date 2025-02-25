@@ -35,5 +35,5 @@ const classroomSchema = new Schema<IClassroom>(
 //     this.classCode = classCode;
 //     next();
 // });
-const ClassRoom = mongoose.model<IClassroom>('classroom', classroomSchema);
-export default ClassRoom;
+const Classroom = mongoose.model<IClassroom>('classroom', classroomSchema);
+export default Classroom;
