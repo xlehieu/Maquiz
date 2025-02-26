@@ -37,38 +37,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
-const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const routers_1 = __importDefault(require("./routers"));
-const database = __importStar(require("./config"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const express_session_1 = __importDefault(require("express-session"));
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
-database.connect();
-//dung lượng tối đa mà client có thể submit lên server
-app.use(express_1.default.urlencoded({ extended: true, limit: '30mb' }));
-//session là cái để mình kiểm soát được trạng thái của người dùng
-app.use((0, express_session_1.default)({
-    secret: String(process.env.SESSION_SECRET),
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, secure: false }, // 10 minutes
-}));
-console.log('ALLOW_ORIGIN:', process.env.ALLOW_ORIGIN);
-const allowedOrigins = [String(process.env.ALLOW_ORIGIN)];
-const corsOptions = {
-    origin: allowedOrigins,
-    credentials: true, // Nếu cần gửi cookie, JWT
-};
-app.use(express_1.default.json({ limit: '30mb' }));
-app.use(body_parser_1.default.json());
-app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)(corsOptions));
-(0, routers_1.default)(app);
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-//# sourceMappingURL=index.js.map
+const UserController = __importStar(require("@controllers/user.controller"));
+const auth_middleware_1 = require("../app/middlewares/auth.middleware");
+const router = express_1.default.Router();
+// const upload = multer({ imageDB: multer.memoryStorage() }); // lưu ảnh tạm thời vào bộ nhớ tạm thời, sau khi up ảnh xong thì xóa (delete req.file)
+router.put('/update', auth_middleware_1.authUserMiddleware, UserController.updateUser);
+router.post('/sign-in', UserController.loginUser);
+router.post('/sign-up', UserController.registerUser);
+router.post('/log-out', UserController.logoutUser);
+router.post('/refresh-token', UserController.refreshToken);
+router.delete('/delete/:id', auth_middleware_1.authMiddleware, UserController.deleteUser);
+router.get('/detail', auth_middleware_1.authUserMiddleware, UserController.getUserDetail);
+router.get('/', auth_middleware_1.authMiddleware, UserController.getAllUser);
+exports.default = router;
+//# sourceMappingURL=user.router.js.map

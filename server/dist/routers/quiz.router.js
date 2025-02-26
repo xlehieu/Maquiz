@@ -37,38 +37,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
-const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const routers_1 = __importDefault(require("./routers"));
-const database = __importStar(require("./config"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const express_session_1 = __importDefault(require("express-session"));
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
-database.connect();
-//dung lượng tối đa mà client có thể submit lên server
-app.use(express_1.default.urlencoded({ extended: true, limit: '30mb' }));
-//session là cái để mình kiểm soát được trạng thái của người dùng
-app.use((0, express_session_1.default)({
-    secret: String(process.env.SESSION_SECRET),
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, secure: false }, // 10 minutes
-}));
-console.log('ALLOW_ORIGIN:', process.env.ALLOW_ORIGIN);
-const allowedOrigins = [String(process.env.ALLOW_ORIGIN)];
-const corsOptions = {
-    origin: allowedOrigins,
-    credentials: true, // Nếu cần gửi cookie, JWT
-};
-app.use(express_1.default.json({ limit: '30mb' }));
-app.use(body_parser_1.default.json());
-app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)(corsOptions));
-(0, routers_1.default)(app);
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-//# sourceMappingURL=index.js.map
+const QuizController = __importStar(require("@controllers/quiz.controller"));
+const auth_middleware_1 = require("@middlewares/auth.middleware");
+const quizRouter = express_1.default.Router();
+// Authentication required
+quizRouter.post('/create', auth_middleware_1.authUserMiddleware, QuizController.createQuiz);
+quizRouter.put('/createQuestion', auth_middleware_1.authUserMiddleware, QuizController.createQuestion);
+quizRouter.get('/getQuizzes', auth_middleware_1.authUserMiddleware, QuizController.getQuizzes);
+quizRouter.put('/updateQuizGeneralInfo', auth_middleware_1.authUserMiddleware, QuizController.updateQuizGeneralInfo);
+quizRouter.get('/getQuizDetail', auth_middleware_1.authUserMiddleware, QuizController.getQuizDetail);
+quizRouter.put('/updateQuizQuestion', auth_middleware_1.authUserMiddleware, QuizController.updateQuizQuestion);
+quizRouter.delete('/deleteQuiz/:id', auth_middleware_1.authUserMiddleware, QuizController.deleteQuiz);
+quizRouter.get('/getQuizForExam/:slug', auth_middleware_1.authUserMiddleware, QuizController.getQuizForExam);
+// No authentication required
+quizRouter.get('/getQuizPreview/:slug', QuizController.getQuizPreview);
+quizRouter.get('/getDiscoveryQuizzes', QuizController.getDiscoveryQuizzes);
+exports.default = quizRouter;
+//# sourceMappingURL=quiz.router.js.map
