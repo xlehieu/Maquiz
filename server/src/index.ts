@@ -22,10 +22,7 @@ app.use(
         cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, secure: false }, // 10 minutes
     }),
 );
-const allowedOrigins = [
-    'http://localhost:3000', // Dev mode
-    'https://yourdomain.com', // Deploy mode
-];
+const allowedOrigins = [String(process.env.ALLOW_ORIGIN)];
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true, // Nếu cần gửi cookie, JWT
