@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 dotenv.config();
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 database.connect();
 //dung lượng tối đa mà client có thể submit lên server
 app.use(express.urlencoded({ extended: true, limit: '30mb' }));
@@ -22,6 +22,7 @@ app.use(
         cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, secure: false }, // 10 minutes
     }),
 );
+console.log(process.env.ALLOW_ORIGIN);
 const allowedOrigins = [String(process.env.ALLOW_ORIGIN)];
 const corsOptions = {
     origin: allowedOrigins,
