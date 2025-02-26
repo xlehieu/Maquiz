@@ -1,6 +1,6 @@
 import mongoose, { Document, Types, Schema } from 'mongoose';
-import { imageClassThumbnailDefault } from '~/src/constants';
-import { generateUniqueRandomString } from '~/src/utils';
+import { imageClassThumbnailDefault } from '~/constants';
+import { generateUniqueRandomString } from '~/utils';
 
 export interface IClassroom extends Document {
     name: string;

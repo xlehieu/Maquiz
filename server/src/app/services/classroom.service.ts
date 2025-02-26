@@ -2,8 +2,8 @@ import { Request } from 'express';
 import ClassRoom from '../models/classroom.model';
 import mongoose, { Types } from 'mongoose';
 import User from '@models/user.model';
-import { generateUniqueRandomString } from '~/src/utils';
-import { imageClassThumbnailDefault } from '~/src/constants';
+import { generateUniqueRandomString } from '~/utils';
+import { imageClassThumbnailDefault } from '~/constants';
 export const getUserClassrooms = (req: Request) => {
     return new Promise(async (resolve, reject) => {
         try {

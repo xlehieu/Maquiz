@@ -15,7 +15,7 @@
             "@controllers/*": ["src/app/controllers/*"], // Alias cho thư mục controllers
             "@services/*": ["src/app/services/*"],
             "@middlewares/*": ["src/app/middlewares/*"],
-            "~/*": ["*"]
+            "~/*": ["src/*"]
         },
         "typeRoots": ["src/@types", "node_modules/@types"], // Thêm thư mục @types của bạn
         "sourceMap": true,
