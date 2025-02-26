@@ -46,7 +46,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_session_1 = __importDefault(require("express-session"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 database.connect();
 //dung lượng tối đa mà client có thể submit lên server
 app.use(express_1.default.urlencoded({ extended: true, limit: '30mb' }));
@@ -69,8 +69,8 @@ app.use(body_parser_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)(corsOptions));
 (0, routers_1.default)(app);
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
-// });
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
 exports.default = app;
 //# sourceMappingURL=index.js.map

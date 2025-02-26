@@ -1,5 +1,13 @@
 {
     "version": 2,
     "builds": [{ "src": "dist/index.js", "use": "@vercel/node" }],
-    "routes": [{ "src": "/api/(.*)", "dest": "dist/index.js" }]
+    "routes": [{ "src": "/api/(.*)", "dest": "dist/index.js" }],
+    "functions": {
+        "api/**.js": {
+            "runtime": "nodejs16.x",
+            "cors": {
+                "allowOrigins": ["https://maquiz-heheheheh.vercel.app"]
+            }
+        }
+    }
 }
