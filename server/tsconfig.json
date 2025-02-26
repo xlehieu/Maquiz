@@ -8,7 +8,7 @@
         "strict": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "baseUrl": ".",
+        "baseUrl": "./",
         "paths": {
             "@types/*": ["src/app/@types/*"], // Alias cho thư mục @types
             "@models/*": ["src/app/models/*"], // Alias cho thư mục models
