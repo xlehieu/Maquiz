@@ -37,8 +37,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const QuizController = __importStar(require("@controllers/quiz.controller"));
-const auth_middleware_1 = require("@middlewares/auth.middleware");
+const QuizController = __importStar(require("../app/controllers/quiz.controller"));
+const auth_middleware_1 = require("../app/middlewares/auth.middleware");
 const quizRouter = express_1.default.Router();
 // Authentication required
 quizRouter.post('/create', auth_middleware_1.authUserMiddleware, QuizController.createQuiz);

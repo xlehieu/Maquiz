@@ -43,7 +43,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPost = void 0;
-const PostService = __importStar(require("@services/post.service"));
+const PostService = __importStar(require("../services/post.service"));
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const post = yield PostService.createPost(req);

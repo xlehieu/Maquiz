@@ -37,8 +37,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const ProductController = __importStar(require("@controllers/product.controller"));
-const auth_middleware_1 = require("@middlewares/auth.middleware");
+const ProductController = __importStar(require("../app/controllers/product.controller"));
+const auth_middleware_1 = require("../app/middlewares/auth.middleware");
 const productRouter = express_1.default.Router();
 productRouter.put('/update/:id', auth_middleware_1.authMiddleware, ProductController.updateProduct);
 productRouter.post('/create', auth_middleware_1.authMiddleware, ProductController.createProduct);

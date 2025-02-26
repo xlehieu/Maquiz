@@ -37,7 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const UserController = __importStar(require("@controllers/user.controller"));
+const UserController = __importStar(require("../app/controllers/user.controller"));
 const auth_middleware_1 = require("../app/middlewares/auth.middleware");
 const router = express_1.default.Router();
 // const upload = multer({ imageDB: multer.memoryStorage() }); // lưu ảnh tạm thời vào bộ nhớ tạm thời, sau khi up ảnh xong thì xóa (delete req.file)

@@ -34,8 +34,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const auth_middleware_1 = require("@middlewares/auth.middleware");
-const ClassroomController = __importStar(require("@controllers/classroom.controller"));
+const auth_middleware_1 = require("../app/middlewares/auth.middleware");
+const ClassroomController = __importStar(require("../app/controllers/classroom.controller"));
 const classroomRouter = (0, express_1.Router)();
 classroomRouter.post('/createClassroom', auth_middleware_1.authUserMiddleware, ClassroomController.createClassroom);
 classroomRouter.get('/getUserClassrooms', auth_middleware_1.authUserMiddleware, ClassroomController.getUserClassrooms);

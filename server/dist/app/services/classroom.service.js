@@ -48,7 +48,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.enrollInClassroom = exports.getClassroomDetail = exports.createClassroom = exports.getUserClassrooms = void 0;
 const classroom_model_1 = __importDefault(require("../models/classroom.model"));
 const mongoose_1 = __importStar(require("mongoose"));
-const user_model_1 = __importDefault(require("@models/user.model"));
+const user_model_1 = __importDefault(require("../models/user.model"));
 const utils_1 = require("~/src/utils");
 const constants_1 = require("~/src/constants");
 const getUserClassrooms = (req) => {

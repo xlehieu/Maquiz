@@ -68,7 +68,8 @@ app.use(body_parser_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)(corsOptions));
 (0, routers_1.default)(app);
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server is running on http://localhost:${port}`);
+// });
+exports.default = app;
 //# sourceMappingURL=index.js.map
