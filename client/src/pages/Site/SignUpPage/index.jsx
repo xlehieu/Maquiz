@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 import { EyeOutlined, EyeInvisibleOutlined, LoadingOutlined } from '@ant-design/icons';
 
-import Button from '~/components/Button';
 import useMutationHooks from '~/hooks/useMutationHooks';
 import * as UserService from '~/services/user.service';
+import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 
 const SignUpPage = () => {
-    const mutationRegister = useMutationHooks((data) => {
-        UserService.register(data);
-    });
+    const navigate = useNavigate();
+    const mutationRegister = useMutationHooks((data) => UserService.register(data));
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
@@ -18,14 +18,27 @@ const SignUpPage = () => {
 
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
-    const handleOnClickRegister = () => {
-        mutationRegister.data({
+    const handleOnClickRegister = (e) => {
+        e.preventDefault();
+        if (!email || !phone || !password || !confirmPassword) {
+            message.error('Vui lòng điền đầy đủ thông tin');
+            return;
+        }
+        mutationRegister.mutate({
             email,
             phone,
             password: password,
             confirmPassword: confirmPassword,
         });
     };
+    useEffect(() => {
+        if (mutationRegister.isSuccess) {
+            message.success('Đăng ký thành công');
+            navigate('/dang-nhap');
+        } else if (mutationRegister.isError) {
+            message.error(mutationRegister.error.message);
+        }
+    }, [mutationRegister.isSuccess, mutationRegister.isError]);
     return (
         <div className="w-full">
             <form className="mx-auto w-full md:max-w-96 space-y-6" method="post">
@@ -44,6 +57,7 @@ const SignUpPage = () => {
                     className="border border-gray-500 py-2 px-3 w-full outline-primary"
                     placeholder="Số điện thoại"
                     name="phone"
+                    autoComplete="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                 />
@@ -55,6 +69,7 @@ const SignUpPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
                         name="password"
+                        autoComplete="new-password"
                         placeholder="Mật khẩu"
                     />
                     {isShowPassword ? (
@@ -71,6 +86,7 @@ const SignUpPage = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         value={confirmPassword}
                         name="confirmPassword"
+                        autoComplete="new-password"
                         placeholder="Nhập lại mật khẩu"
                     />
                     <span onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}>
@@ -78,13 +94,12 @@ const SignUpPage = () => {
                     </span>
                 </div>
                 <button
-                    primary
                     disabled={!email || !phone || !password || !confirmPassword}
                     className={`w-full cursor-pointer bg-primary text-white rounded py-1 ${
                         (!email || !phone || !password || !confirmPassword || mutationRegister.isPending) &&
                         'opacity-40 cursor-default'
                     }`}
-                    onClick={() => handleOnClickRegister()}
+                    onClick={handleOnClickRegister}
                 >
                     {mutationRegister.isPending ? <LoadingOutlined /> : 'ĐĂNG KÝ'}
                 </button>

@@ -53,7 +53,6 @@ export const registerUser = (req: Request) => {
             if (user) {
                 return resolve({
                     status: 'OK',
-                    data: user,
                 });
             }
         } catch (err) {

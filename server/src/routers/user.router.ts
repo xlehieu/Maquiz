@@ -1,10 +1,6 @@
 import express from 'express';
 import * as UserController from '@controllers/user.controller';
-import {
-    authMiddleware,
-    authUserMiddleware,
-    frontEndAppAuthenticateMiddleware,
-} from '../app/middlewares/auth.middleware';
+import { authMiddleware, authUserMiddleware } from '../app/middlewares/auth.middleware';
 
 const router = express.Router();
 // const upload = multer({ imageDB: multer.memoryStorage() }); // lưu ảnh tạm thời vào bộ nhớ tạm thời, sau khi up ảnh xong thì xóa (delete req.file)

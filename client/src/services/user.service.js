@@ -1,6 +1,5 @@
 import axios from 'axios';
 import axiosCredentials from './axios.credential';
-import axiosApplicationJson from './axios.default';
 import axiosNoInterceptor from './axios.nointerceptor';
 export const login = async (data) => {
     try {
@@ -31,13 +30,16 @@ export const getUserDetail = async () => {
 };
 export const register = async (data) => {
     try {
-        const res = axiosApplicationJson.post(`/user/sign-up`, JSON.stringify(data));
-        if (res) {
-            return res;
+        const res = await axiosNoInterceptor.post(`/user/sign-up`, JSON.stringify(data));
+        if (res.data) {
+            return res.data;
         }
         return res;
     } catch (err) {
-        throw new Error(err.response.data.message);
+        if (err.response) {
+            const errorMessage = err.response?.data?.message || 'Có lỗi xảy ra';
+            throw new Error(errorMessage);
+        }
     }
 };
 export const refreshToken = async () => {
@@ -61,7 +63,6 @@ export const updateUser = async (data) => {
         const res = await axiosCredentials.put(`/user/update`, JSON.stringify(data));
         return res.data;
     } catch (err) {
-        console.log(err);
         throw new Error(err.response.data.message);
     }
 };
