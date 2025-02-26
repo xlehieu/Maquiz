@@ -22,7 +22,7 @@ app.use(
         cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, secure: false }, // 10 minutes
     }),
 );
-console.log(process.env.ALLOW_ORIGIN);
+console.log('ALLOW_ORIGIN:', process.env.ALLOW_ORIGIN);
 const allowedOrigins = [String(process.env.ALLOW_ORIGIN)];
 const corsOptions = {
     origin: allowedOrigins,
