@@ -63,6 +63,7 @@ const corsOptions = {
     origin: allowedOrigins,
     credentials: true, // Nếu cần gửi cookie, JWT
 };
+app.set('timeout', 50000);
 app.use(express_1.default.json({ limit: '30mb' }));
 app.use(body_parser_1.default.json());
 app.use((0, cookie_parser_1.default)());
